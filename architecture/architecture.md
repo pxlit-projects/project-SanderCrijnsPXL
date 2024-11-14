@@ -1,3 +1,4 @@
+![Architectuur Java Sander](ArchitectuurJavaSander.png)
 # Architectuur Overzicht
 
 ## 1. Frontend (Angular)
