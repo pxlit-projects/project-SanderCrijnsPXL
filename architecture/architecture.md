@@ -23,12 +23,9 @@
 
 ## 4. Communicatie Tussen Services
 - **OpenFeign**:
-  - **Beschrijving**: OpenFeign wordt gebruikt om op een eenvoudige manier HTTP-verzoeken tussen microservices te versturen.
-  - **Communicatie**: Synchronous communicatie tussen de microservices.
+  Wanneer een GET-request wordt gedaan om een post op te halen, gebruikt de Post Service OpenFeign (synchrone communicatie) om de Review Service en Comment Service aan te roepen. Het haalt de gekoppelde reviews en reacties op basis van hun ID's op, combineert deze met de gegevens van de post en stuurt de volledige respons terug naar de API Gateway.
 - **Message Bus (RabbitMQ)**:
-  - **Beschrijving**: RabbitMQ wordt gebruikt als message bus voor asynchrone communicatie tussen services. Dit stelt services in staat om berichten te verzenden en ontvangen zonder directe koppeling.
-  - **Communicatie**: Asynchronous communicatie, voornamelijk voor gebeurtenissen die niet onmiddellijk een antwoord vereisen (bijvoorbeeld notificaties of updates).
-
+  Wanneer een nieuwe reactie of review aan een post wordt toegevoegd, wordt een RabbitMQ-bericht naar de queue verzonden. De Post Service luistert naar de queue, werkt de betreffende post in zijn database bij door de nieuwe review- of reactie-ID te koppelen en slaat de wijzigingen op.
 ## 5. Eureka Discovery Service
 - **Beschrijving**: Alle microservices registreren zich bij de Eureka Discovery Service, waardoor ze elkaar dynamisch kunnen ontdekken. Dit ondersteunt schaalbaarheid en flexibiliteit in servicecommunicatie.
 
