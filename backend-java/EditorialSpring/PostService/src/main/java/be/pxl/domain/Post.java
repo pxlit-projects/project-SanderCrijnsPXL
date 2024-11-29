@@ -22,5 +22,6 @@ public class Post {
     String content;
     String author;
     LocalDate dateCreated;
-
+    Boolean isConcept;
+    Boolean isPublished;
 }
