@@ -1,9 +1,11 @@
 <div class="post-overview"> 
   <h1 class="overview-title">Post Overview</h1>
+
+  <app-post-filter (filterChanged)="applyFilters($event)"></app-post-filter>
   
   <div class="post-grid">
     @if (posts.length > 0) {
-      @for (post of posts; track post.title) {
+      @for (post of filteredPosts; track post.title) {
           <app-post-item [post]="post" class="post-item"></app-post-item>
       }
     }

@@ -54,7 +54,7 @@ public class PostService implements IPostService{
                 .title(post.getTitle())
                 .author(post.getAuthor())
                 .content(post.getContent())
-                .dateCreated(LocalDate.now())
+                .dateCreated(post.getDateCreated())
                 .isConcept(post.getIsConcept())
                 .isPublished(post.getIsPublished())
                 .build();
