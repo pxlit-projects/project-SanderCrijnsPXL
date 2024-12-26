@@ -1,0 +1,17 @@
+.navbar {
+    background-color: #333;
+    color: white;
+    padding: 10px 20px;
+}
+  
+.container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+a {
+    padding: 5px;
+    color: white;
+    text-decoration: none;
+}

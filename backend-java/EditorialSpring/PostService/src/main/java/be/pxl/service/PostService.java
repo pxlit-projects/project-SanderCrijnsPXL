@@ -1,6 +1,7 @@
 package be.pxl.service;
 
 import be.pxl.domain.Post;
+import be.pxl.domain.PostStatus;
 import be.pxl.domain.request.ChangeContentRequest;
 import be.pxl.domain.request.PostRequest;
 import be.pxl.domain.response.PostResponse;
@@ -21,6 +22,9 @@ public class PostService implements IPostService{
     @Override
     public void addPost(PostRequest postRequest) {
         postRepository.save(mapToPost(postRequest));
+        if (postRequest.status() == PostStatus.REVIEW) {
+            //TODO: RabitMQ to ReviewService
+        }
     }
 
     @Override
@@ -35,8 +39,17 @@ public class PostService implements IPostService{
     @Override
     public List<PostResponse> getPublishedPosts() {
         List<Post> posts = postRepository.findAll();
-        posts = posts.stream().filter(Post::getIsPublished).toList();
+        posts = posts.stream().filter(post -> post.getStatus() == PostStatus.PUBLISHED).toList();
         return posts.stream().map(this::mapToPostResponse).toList();
+    }
+
+    @Override
+    public void addToReview(Long id) {
+        Post post = postRepository.findById(id).orElseThrow();
+        post.setStatus(PostStatus.REVIEW);
+        postRepository.save(post);
+
+        //TODO: RabitMQ to ReviewService
     }
 
     private Post mapToPost(PostRequest postRequest) {
@@ -45,8 +58,7 @@ public class PostService implements IPostService{
                 .author(postRequest.author())
                 .content(postRequest.content())
                 .dateCreated(LocalDate.now())
-                .isConcept(postRequest.isConcept())
-                .isPublished(false)
+                .status(postRequest.status())
                 .build();
     }
     private PostResponse mapToPostResponse(Post post) {
@@ -55,8 +67,7 @@ public class PostService implements IPostService{
                 .author(post.getAuthor())
                 .content(post.getContent())
                 .dateCreated(post.getDateCreated())
-                .isConcept(post.getIsConcept())
-                .isPublished(post.getIsPublished())
+                .status(post.getStatus())
                 .build();
     }
 }

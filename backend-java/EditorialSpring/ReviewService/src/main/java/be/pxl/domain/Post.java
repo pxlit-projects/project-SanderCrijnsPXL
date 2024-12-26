@@ -9,18 +9,14 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "posts")
+@Table(name = "posts_to_review")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Post {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    String title;
-    String content;
-    String author;
-    LocalDate dateCreated;
-    PostStatus status;
+    Boolean isAccepted;
+    String comment;
 }

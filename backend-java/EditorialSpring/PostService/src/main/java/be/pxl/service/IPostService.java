@@ -12,4 +12,6 @@ public interface IPostService {
     PostResponse changeContent(Long id, ChangeContentRequest changeContentRequest);
 
     List<PostResponse> getPublishedPosts();
+
+    void addToReview(Long id);
 }

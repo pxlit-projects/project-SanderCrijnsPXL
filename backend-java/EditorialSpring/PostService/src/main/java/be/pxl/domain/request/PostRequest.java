@@ -1,5 +1,5 @@
 package be.pxl.domain.request;
 
-import java.util.Date;
+import be.pxl.domain.PostStatus;
 
-public record PostRequest(String title, String content, String author, Boolean isConcept) {}
+public record PostRequest(String title, String content, String author, PostStatus status) {}

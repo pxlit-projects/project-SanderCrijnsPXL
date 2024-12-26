@@ -39,4 +39,14 @@ public class PostController {
             return ResponseEntity.notFound().build();
         }
     }
+    @PatchMapping("/{id}/add-to-review")
+    public ResponseEntity<Void> addToReview(@PathVariable Long id) {
+        try {
+            postService.addToReview(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
 }
