@@ -1,0 +1,39 @@
+<div class="edit-post-container">
+    <h1 class="edit-post-title">Edit Post</h1>
+  
+    <form class="edit-post-form" (ngSubmit)="saveChanges()">
+      <div class="form-group">
+        <label for="title" class="form-label">Title</label>
+        <input
+          type="text"
+          id="title"
+          class="form-input"
+          [(ngModel)]="title"
+          name="title"
+          required
+        />
+      </div>
+  
+      <div class="form-group">
+        <label for="content" class="form-label">Content</label>
+        <textarea
+          id="content"
+          class="form-input"
+          [(ngModel)]="content"
+          name="content"
+          required
+          rows="6"
+        ></textarea>
+      </div>
+  
+      <div class="form-actions">
+        <button type="submit" class="save-button" [disabled]="!title || !content">
+          Save Changes
+        </button>
+        <button type="button" class="cancel-button" (click)="router.navigate(['/all-posts'])">
+          Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+  

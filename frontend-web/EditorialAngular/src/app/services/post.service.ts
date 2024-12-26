@@ -4,6 +4,7 @@ import { catchError, Observable, of, timeout } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Post } from '../models/post.model';
 import { PostRequest } from '../models/post-request.model';
+import { ChangeContentRequest } from '../models/change-content-request.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,24 @@ export class PostService {
   apiUrl = environment.apiUrl + '/posts';
   http: HttpClient = inject(HttpClient);
 
-  public getPosts(): Observable<Post[]> {
-    const getPostsUrl = this.apiUrl + '/publishedPosts'; 
+  public getAllPosts(): Observable<Post[]> {
+    const getPostsUrl = this.apiUrl + '/all'; 
+    
+    console.log('Fetching posts from:', getPostsUrl);
+    
+    return this.http.get<Post[]>(getPostsUrl);
+  }
+
+  public getPublishedPosts(): Observable<Post[]> {
+    const getPostsUrl = this.apiUrl + '/published'; 
+    
+    console.log('Fetching posts from:', getPostsUrl);
+    
+    return this.http.get<Post[]>(getPostsUrl);
+  }
+
+  public getPostsToReview(): Observable<Post[]> {
+    const getPostsUrl = this.apiUrl + '/openForReview'; 
     
     console.log('Fetching posts from:', getPostsUrl);
     
@@ -26,6 +43,19 @@ export class PostService {
     return this.http.post<void>(this.apiUrl, postRequest).pipe(
       catchError((error) => {
         console.error('Error creating post:', error);
+        return of();
+      })
+    );
+  }
+
+  public changeContent(id: number, changeContentRequest: ChangeContentRequest): Observable<Post> {
+    const changeContentUrl = `${this.apiUrl}/${id}/changeContent`;
+    
+    console.log('Changing content of post at:', changeContentUrl);
+    
+    return this.http.patch<Post>(changeContentUrl, changeContentRequest).pipe(
+      catchError((error) => {
+        console.error('Error changing post content:', error);
         return of();
       })
     );

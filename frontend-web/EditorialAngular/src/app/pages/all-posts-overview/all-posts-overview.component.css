@@ -1,0 +1,70 @@
+/* Container */
+.post-overview {
+    width: 100%;
+    margin: 20px 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Title Styling */
+.overview-title {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Grid for Posts */
+.post-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+}
+
+/* Post Card Styling */
+.post-item {
+    background-color: #fff;
+    transition: transform 0.2s ease-in-out;
+}
+
+.post-item:hover {
+    transform: translateY(-5px);
+}
+
+/* No Posts Found Message */
+.no-posts {
+    grid-column: span 3;
+    font-size: 1.2rem;
+    color: #777;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.post-overview {
+    padding: 20px;
+}
+
+
+/* Responsive Breakpoints */
+
+/* 1 column for phones */
+@media (max-width: 768px) {
+    .post-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* 2 columns for tablets */
+@media (min-width: 769px) and (max-width: 999px) {
+    .post-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 3 columns for larger screens */
+@media (min-width: 1000px) {
+    .post-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}

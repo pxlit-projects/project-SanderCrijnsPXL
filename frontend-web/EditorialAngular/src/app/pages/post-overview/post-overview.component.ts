@@ -17,10 +17,8 @@ export class PostOverviewComponent implements OnInit {
   posts: Post[] = [];
   filteredPosts: Post[] = [];
 
-  constructor() { }
-
   ngOnInit(): void {
-    this.postService.getPosts().subscribe(
+    this.postService.getPublishedPosts().subscribe(
       (loadedposts) => {
         this.posts = loadedposts;
         this.filteredPosts = loadedposts;

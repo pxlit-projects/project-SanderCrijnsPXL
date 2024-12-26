@@ -1,17 +1,19 @@
+import { PostStatus } from "./post-status.model";
+
 export class Post {
+    id: number;
     title: string;
     content: string;
     author: string;
     dateCreated: Date;
-    isConcept: boolean;
-    isPublished: boolean;
+    status: String;
 
-    constructor(title: string, content: string, author: string, dateCreated: Date, isConcept: boolean, isPublished: boolean) {
+    constructor(id: number, title: string, content: string, author: string, dateCreated: Date, status: PostStatus) {
+        this.id = id;
         this.title = title;
         this.content = content;
         this.author = author;
         this.dateCreated = dateCreated;
-        this.isConcept = isConcept;
-        this.isPublished = isPublished;
+        this.status = status;
     }
   }

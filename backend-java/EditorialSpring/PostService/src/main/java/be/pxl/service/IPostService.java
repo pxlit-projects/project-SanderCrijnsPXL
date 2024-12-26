@@ -14,4 +14,8 @@ public interface IPostService {
     List<PostResponse> getPublishedPosts();
 
     void addToReview(Long id);
+
+    List<PostResponse> getAllPosts();
+
+    List<PostResponse> getPostsToReview();
 }

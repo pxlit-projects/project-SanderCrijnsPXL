@@ -1,0 +1,37 @@
+<div class="post-overview">
+  <h1 class="overview-title">All posts</h1>
+
+  @if (groupedPosts['CONCEPT'].length > 0) {
+  <h2 class="status-title">Concept</h2>
+  <div class="post-grid">
+    @for (post of groupedPosts['CONCEPT']; track post.id) {
+    <a (click)="navigateToEdit(post)">
+      <app-post-item [post]="post" class="post-item"></app-post-item>
+    </a>
+    }
+  </div>
+  }
+  @if (groupedPosts['REVIEW'].length > 0) {
+  <h2 class="status-title">Review</h2>
+  <div class="post-grid">
+    @for (post of groupedPosts['REVIEW']; track post.id) {
+    <a (click)="navigateToEdit(post)">
+      <app-post-item [post]="post" class="post-item"></app-post-item>
+    </a>
+    }
+  </div>
+  }
+  @if (groupedPosts['PUBLISHED'].length > 0) {
+  <h2 class="status-title">Published</h2>
+  <div class="post-grid">
+    @for (post of groupedPosts['PUBLISHED']; track post.id) {
+    <a (click)="navigateToEdit(post)">
+      <app-post-item [post]="post" class="post-item"></app-post-item>
+    </a>
+    }
+  </div>
+  }
+  @if (posts.length === 0) {
+  <p class="no-posts">No posts found</p>
+  }
+</div>

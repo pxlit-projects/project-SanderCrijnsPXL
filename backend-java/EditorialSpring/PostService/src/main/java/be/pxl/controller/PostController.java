@@ -18,9 +18,21 @@ import java.util.List;
 public class PostController {
     private final IPostService postService;
 
-    @GetMapping("/publishedPosts")
+    @GetMapping("/published")
     public ResponseEntity<List<PostResponse>> getPublishedPosts() {
         List<PostResponse> response = postService.getPublishedPosts();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<PostResponse>> getAllPosts() {
+        List<PostResponse> response = postService.getAllPosts();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/openForReview")
+    public ResponseEntity<List<PostResponse>> getPostsToReview() {
+        List<PostResponse> response = postService.getPostsToReview();
         return ResponseEntity.ok(response);
     }
 

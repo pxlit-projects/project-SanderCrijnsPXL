@@ -44,6 +44,19 @@ public class PostService implements IPostService{
     }
 
     @Override
+    public List<PostResponse> getAllPosts() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream().map(this::mapToPostResponse).toList();
+    }
+
+    @Override
+    public List<PostResponse> getPostsToReview() {
+        List<Post> posts = postRepository.findAll();
+        posts = posts.stream().filter(post -> post.getStatus() == PostStatus.REVIEW).toList();
+        return posts.stream().map(this::mapToPostResponse).toList();
+    }
+
+    @Override
     public void addToReview(Long id) {
         Post post = postRepository.findById(id).orElseThrow();
         post.setStatus(PostStatus.REVIEW);
@@ -51,6 +64,7 @@ public class PostService implements IPostService{
 
         //TODO: RabitMQ to ReviewService
     }
+
 
     private Post mapToPost(PostRequest postRequest) {
         return Post.builder()
@@ -63,6 +77,7 @@ public class PostService implements IPostService{
     }
     private PostResponse mapToPostResponse(Post post) {
         return PostResponse.builder()
+                .id(post.getId())
                 .title(post.getTitle())
                 .author(post.getAuthor())
                 .content(post.getContent())
