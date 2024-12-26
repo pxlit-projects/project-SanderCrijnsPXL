@@ -12,6 +12,7 @@
         <module name="DiscoveryService" />
         <module name="ReviewService" />
         <module name="PostService" />
+        <module name="GatewayService" />
       </profile>
     </annotationProcessing>
   </component>
@@ -21,6 +22,7 @@
       <module name="ConfigService" options="-parameters" />
       <module name="DiscoveryService" options="-parameters" />
       <module name="EditorialSpring" options="" />
+      <module name="GatewayService" options="-parameters" />
       <module name="PostService" options="-parameters" />
       <module name="ReviewService" options="-parameters" />
     </option>

@@ -27,7 +27,8 @@
 		<module>DiscoveryService</module>
 		<module>PostService</module>
 		<module>ConfigService</module>
-	</modules>
+        <module>GatewayService</module>
+    </modules>
     <scm>
 		<connection/>
 		<developerConnection/>
@@ -39,14 +40,6 @@
 		<spring-cloud.version>2023.0.3</spring-cloud.version>
 	</properties>
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>

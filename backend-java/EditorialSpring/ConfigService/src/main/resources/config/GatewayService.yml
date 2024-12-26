@@ -1,0 +1,47 @@
+server:
+  port: 8083
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins:
+              - "*"
+            allowedMethods:
+              - "*"
+            allowedHeaders:
+              - "*"
+            allowCredentials: false
+      routes:
+        - id: PostService
+          uri: lb://PostService
+          predicates:
+            - Path=/api/posts/**
+          filters:
+#            - RewritePath=/employee/(?<path>.*), /$\{path}
+            - DedupeResponseHeader=Access-Control-Allow-Origin
+        - id: ReviewService
+          uri: lb://ReviewService
+          predicates:
+            - Path=/api/reviews/**
+          filters:
+            #            - RewritePath=/employee/(?<path>.*), /$\{path}
+            - DedupeResponseHeader=Access-Control-Allow-Origin
+        - id: CommentService
+          uri: lb://CommentService
+          predicates:
+            - Path=/api/comments/**
+          filters:
+            #            - RewritePath=/employee/(?<path>.*), /$\{path}
+            - DedupeResponseHeader=Access-Control-Allow-Origin
+
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8040/eureka/

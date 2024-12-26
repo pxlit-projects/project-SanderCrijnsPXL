@@ -8,7 +8,7 @@ import { Post } from '../models/post.model';
   providedIn: 'root'
 })
 export class PostService {
-  apiUrl = environment.apiUrl + '/api/posts/publishedPosts';
+  apiUrl = environment.apiUrl + '/posts/publishedPosts';
   http: HttpClient = inject(HttpClient);
 
   public getPosts(): Observable<Post[]> {
