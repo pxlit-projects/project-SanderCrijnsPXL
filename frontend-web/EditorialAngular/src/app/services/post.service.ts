@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, timeout } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Post } from '../models/post.model';
-import { PostRequest } from '../models/post-request';
+import { PostRequest } from '../models/post-request.model';
 
 @Injectable({
   providedIn: 'root'
