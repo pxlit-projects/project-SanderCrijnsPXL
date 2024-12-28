@@ -4,13 +4,14 @@ import { Post } from '../../models/post.model';
 import { PostItemComponent } from "../../components/post-item/post-item.component";
 import { CommonModule } from '@angular/common';
 import { PostFilterComponent } from '../../components/post-filter/post-filter.component';
+import { PostItemButtonsComponent } from "../../components/post-item-buttons/post-item-buttons.component";
 
 @Component({
   selector: 'app-post-overview',
   templateUrl: './post-overview.component.html',
   styleUrls: ['./post-overview.component.css'],
   standalone: true,
-  imports: [PostItemComponent, PostFilterComponent, CommonModule]
+  imports: [PostItemComponent, PostFilterComponent, CommonModule, PostItemButtonsComponent]
 })
 export class PostOverviewComponent implements OnInit {
   postService: PostService = inject(PostService);

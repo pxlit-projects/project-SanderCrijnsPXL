@@ -1,0 +1,117 @@
+.post-item-buttons {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.comment-btn,
+.show-comments-btn {
+    padding: 10px 15px;
+    font-size: 14px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.comment-btn {
+    background-color: #007BFF;
+    color: white;
+}
+
+.comment-btn:hover {
+    background-color: #0056b3;
+}
+
+.show-comments-btn {
+    background-color: #28a745;
+    color: white;
+}
+
+.show-comments-btn:hover {
+    background-color: #218838;
+}
+
+.comment-box textarea {
+    width: 100%;
+    height: 100px;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.comments-list {
+    margin-top: 10px;
+    background-color: #f8f8f8;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.comment-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.comment-item button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.comment-box {
+    margin-top: 15px;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.comment-box label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.comment-box textarea,
+.comment-box input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.comment-box textarea {
+    height: 100px;
+    resize: none;
+}
+
+.comment-box input {
+    height: 40px;
+}
+
+.comment-box button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.comment-box button:hover {
+    background-color: #0056b3;
+}
+
+button[type="submit"]:disabled {
+    background-color: #d3d3d3; /* Light grey background */
+    color: #999; /* Lighter text */
+}

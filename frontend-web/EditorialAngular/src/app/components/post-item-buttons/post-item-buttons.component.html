@@ -1,0 +1,27 @@
+<div class="post-item-buttons">
+    <button class="comment-btn" (click)="toggleCommentBox()">Add Comment</button>
+
+    @if (showCommentBox) {
+    <div class="comment-box">
+        <label for="comment">Comment</label>
+        <textarea id="comment" [(ngModel)]="commentRequest.content" required></textarea>
+        <label for="author">Author</label>
+        <input name="author" type="text" id="author" [(ngModel)]="commentRequest.author" required/>
+        <button type="submit" [disabled]="commentRequest.content === '' || !commentRequest.author" (click)="submitComment()">Submit</button>
+    </div>
+    }
+
+    <button class="show-comments-btn" (click)="getComments()">Show Comments</button>
+
+    @if (comments.length > 0) {
+    <div class="comments-list">
+        @for (comment of comments; track comment.id) {
+        <div class="comment-item">
+            <p>{{ comment.content }} - <i>{{ comment.author }}</i></p>
+            <button (click)="editComment(comment)">✏️</button>
+            <button (click)="deleteComment(comment.id)">🗑️</button>
+        </div>
+        }
+    </div>
+    }
+</div>

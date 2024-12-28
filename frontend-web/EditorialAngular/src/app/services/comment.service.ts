@@ -14,10 +14,14 @@ export class CommentService {
   http: HttpClient = inject(HttpClient);
 
   public getCommentsForPost(postId: number): Observable<Comment[]> {
+    console.log('getCommentsForPost');
     return this.http.get<Comment[]>(`${this.apiUrl}/${postId}`);
   }
 
   public addCommentToPost(postId: number, comment: CommentRequest): Observable<void> {
+    console.log('addCommentToPost');
+    console.log(postId);
+    console.log(comment);
     return this.http.post<void>(`${this.apiUrl}/add/${postId}`, comment);
   }
 
