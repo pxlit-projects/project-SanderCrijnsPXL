@@ -2,10 +2,13 @@
 <div class="post-grid">
     @if (posts.length > 0) {
       @for (post of posts; track post.title) {
-        <app-post-item [post]="post" class="post-item"></app-post-item>
+        <div class="post-container">
+          <app-post-item [post]="post" class="post-item"></app-post-item>
+          <app-review-buttons [postId]="post.id" class="review-buttons"></app-review-buttons>
+        </div>
       }
     }
     @else {
       <p class="no-posts">No posts found</p>
     }
-  </div>
+</div>

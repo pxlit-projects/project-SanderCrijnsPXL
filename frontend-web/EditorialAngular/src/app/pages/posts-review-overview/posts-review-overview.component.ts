@@ -2,11 +2,12 @@ import { Component, inject } from '@angular/core';
 import { PostService } from '../../services/post.service';
 import { Post } from '../../models/post.model';
 import { PostItemComponent } from "../../components/post-item/post-item.component";
+import { ReviewButtonsComponent } from "../../components/review-buttons/review-buttons.component";
 
 @Component({
   selector: 'app-posts-review-overview',
   standalone: true,
-  imports: [PostItemComponent],
+  imports: [PostItemComponent, ReviewButtonsComponent],
   templateUrl: './posts-review-overview.component.html',
   styleUrl: './posts-review-overview.component.css'
 })

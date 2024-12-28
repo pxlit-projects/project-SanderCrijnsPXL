@@ -1,0 +1,13 @@
+<div class="review-buttons">
+    <button class="approve-btn" (click)="approve()">Approve Post</button>
+    
+    <button class="reject-btn" (click)="toggleReject()">Reject Post</button>
+    
+    @if (showRejectForm) {
+      <div class="reject-form">
+        <label for="comment">Comment</label>
+        <textarea id="comment" [(ngModel)]="comment"></textarea>
+        <button type="submit" (click)="reject()">Submit</button>
+      </div>
+    }
+</div>
