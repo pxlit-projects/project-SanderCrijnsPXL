@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, of, timeout } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Post } from '../models/post.model';
-import { PostRequest } from '../models/post-request.model';
-import { ChangeContentRequest } from '../models/change-content-request.model';
+import { PostRequest } from '../models/request/post-request.model';
+import { ChangeContentRequest } from '../models/request/change-content-request.model';
 
 @Injectable({
   providedIn: 'root'

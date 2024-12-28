@@ -16,4 +16,4 @@ export class Post {
         this.dateCreated = dateCreated;
         this.status = status;
     }
-  }
+}

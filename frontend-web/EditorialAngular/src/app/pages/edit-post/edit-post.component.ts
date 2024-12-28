@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Post } from '../../models/post.model';
 import { PostService } from '../../services/post.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChangeContentRequest } from '../../models/change-content-request.model';
+import { ChangeContentRequest } from '../../models/request/change-content-request.model';
 import { FormsModule } from '@angular/forms';
 
 @Component({

@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { PostService } from '../../services/post.service';
-import { PostRequest } from '../../models/post-request.model';
+import { PostRequest } from '../../models/request/post-request.model';
 import { PostStatus } from '../../models/post-status.model';
 import { FormsModule } from '@angular/forms';
 

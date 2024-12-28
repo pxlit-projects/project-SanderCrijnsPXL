@@ -18,16 +18,16 @@ import java.util.List;
 public class CommentController {
     private final ICommentService commentService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<List<CommentResponse>> getCommentsForPost(@PathVariable Long id) {
-        List<CommentResponse> response = commentService.getCommentsForPost(id);
+    @GetMapping("/{postId}")
+    public ResponseEntity<List<CommentResponse>> getCommentsForPost(@PathVariable Long postId) {
+        List<CommentResponse> response = commentService.getCommentsForPost(postId);
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/add/{id}")
+    @PostMapping("/add/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void addPost(@PathVariable Long id , @RequestBody CommentRequest comment) {
-        commentService.addCommentToPost(id, comment);
+    public void addPost(@PathVariable Long postId , @RequestBody CommentRequest comment) {
+        commentService.addCommentToPost(postId, comment);
     }
 
     @DeleteMapping("/{id}")

@@ -54,6 +54,7 @@ public class CommentService implements ICommentService{
     private CommentResponse mapCommentToCommentResponse(Comment comment) {
         return CommentResponse.builder()
                 .id(comment.getId())
+                .postId(comment.getPostId())
                 .content(comment.getContent())
                 .author(comment.getAuthor())
                 .build();

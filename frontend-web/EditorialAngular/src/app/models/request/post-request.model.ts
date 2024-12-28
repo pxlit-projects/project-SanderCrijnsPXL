@@ -1,4 +1,4 @@
-import { PostStatus } from "./post-status.model";
+import { PostStatus } from "../post-status.model";
 
 export interface PostRequest {
   title: string;
