@@ -1,1 +1,11 @@
-<p>posts-review-overview works!</p>
+<h1 class="overview-title">Posts to review</h1>
+<div class="post-grid">
+    @if (posts.length > 0) {
+      @for (post of posts; track post.title) {
+        <app-post-item [post]="post" class="post-item"></app-post-item>
+      }
+    }
+    @else {
+      <p class="no-posts">No posts found</p>
+    }
+  </div>
