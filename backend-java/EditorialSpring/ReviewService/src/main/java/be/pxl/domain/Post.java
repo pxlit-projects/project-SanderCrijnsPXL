@@ -17,6 +17,10 @@ import java.time.LocalDate;
 public class Post {
     @Id
     private Long id;
+    private String title;
+    private String content;
+    private String author;
+    private String dateCreated;
     private ReviewStatus status;
     private String comment;
 }

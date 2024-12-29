@@ -3,12 +3,15 @@ package be.pxl.service;
 import be.pxl.domain.Post;
 import be.pxl.domain.ReviewStatus;
 import be.pxl.domain.request.RabbitPostRequest;
+import be.pxl.domain.response.PostResponse;
 import be.pxl.domain.response.RabbitPostResponse;
 import be.pxl.repository.ReviewRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -38,9 +41,37 @@ public class ReviewService implements IReviewService {
         reviewRepository.save(post);
     }
 
+    @Override
+    public List<PostResponse> getPostsToReview() {
+        List<PostResponse> listPending  = reviewRepository.findAllByStatus(ReviewStatus.PENDING).stream()
+                .map(this::mapPostToPostResponse)
+                .toList();
+        List<PostResponse> listRejected = reviewRepository.findAllByStatus(ReviewStatus.REJECTED).stream()
+                .map(this::mapPostToPostResponse)
+                .toList();
+        return List.of(listPending, listRejected).stream()
+                .flatMap(List::stream)
+                .toList();
+    }
+
+    private PostResponse mapPostToPostResponse(Post post) {
+        return PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .author(post.getAuthor())
+                .dateCreated(post.getDateCreated())
+                .comment(post.getComment())
+                .build();
+    }
+
     private Post mapRabbitPostRequestToPost(RabbitPostRequest request) {
         return Post.builder()
                 .id(request.id())
+                .title(request.title())
+                .content(request.content())
+                .author(request.author())
+                .dateCreated(request.dateCreated())
                 .status(ReviewStatus.PENDING)
                 .comment(null)
                 .build();

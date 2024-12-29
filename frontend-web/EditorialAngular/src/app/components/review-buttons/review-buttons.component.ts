@@ -20,6 +20,7 @@ export class ReviewButtonsComponent {
   approve() {
     this.reviewService.approvePost(this.postId).subscribe(() => {
       alert('Post approved successfully!');
+      window.location.reload();
     });
   }
 
@@ -29,7 +30,7 @@ export class ReviewButtonsComponent {
 
   reject() {
     this.reviewService.rejectPost(this.postId, this.comment).subscribe(() => {
-      alert('Post rejected with comment.');
+      window.location.reload();
       this.showRejectForm = false;
       this.comment = '';
     });

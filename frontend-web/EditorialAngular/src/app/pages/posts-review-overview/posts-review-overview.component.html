@@ -4,6 +4,7 @@
       @for (post of posts; track post.title) {
         <div class="post-container">
           <app-post-item [post]="post" class="post-item"></app-post-item>
+          <app-review-comment [comment]="post.comment"></app-review-comment>
           <app-review-buttons [postId]="post.id" class="review-buttons"></app-review-buttons>
         </div>
       }

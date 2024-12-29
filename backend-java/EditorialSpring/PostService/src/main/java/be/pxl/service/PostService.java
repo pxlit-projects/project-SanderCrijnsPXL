@@ -99,6 +99,10 @@ public class PostService implements IPostService{
     private void sendToReviewService(Post post) {
         rabbitTemplate.convertAndSend("post-to-review-queue", RabbitPostResponse.builder()
                 .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .author(post.getAuthor())
+                .dateCreated(post.getDateCreated().toString())
                 .build());
     }
 }
