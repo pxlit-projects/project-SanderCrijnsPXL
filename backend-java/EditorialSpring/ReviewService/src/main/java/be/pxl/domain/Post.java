@@ -17,6 +17,6 @@ import java.time.LocalDate;
 public class Post {
     @Id
     private Long id;
-    private Boolean isAccepted;
+    private ReviewStatus status;
     private String comment;
 }

@@ -2,11 +2,12 @@ package be.pxl.service;
 
 import be.pxl.domain.Post;
 import be.pxl.domain.PostStatus;
-import be.pxl.domain.request.ChangeContentRequest;
-import be.pxl.domain.request.PostRequest;
-import be.pxl.domain.response.PostResponse;
+import be.pxl.domain.request.*;
+import be.pxl.domain.response.*;
 import be.pxl.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -16,13 +17,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService implements IPostService{
     private final PostRepository postRepository;
+    private final RabbitTemplate rabbitTemplate;
+
+    @RabbitListener(queues = "review-to-post-queue")
+    public void receivePost(RabbitReviewPostRequest request) {
+        Post post = postRepository.findById(request.id()).orElseThrow();
+        if (request.status().equals("ACCEPTED")) {
+            post.setStatus(PostStatus.PUBLISHED);
+        }
+        postRepository.save(post);
+    }
 
 
     @Override
     public void addPost(PostRequest postRequest) {
-        postRepository.save(mapToPost(postRequest));
+        Post post = mapToPost(postRequest);
+        postRepository.save(post);
         if (postRequest.status() == PostStatus.REVIEW) {
-            //TODO: RabitMQ to ReviewService
+            sendToReviewService(post);
         }
     }
 
@@ -61,7 +73,7 @@ public class PostService implements IPostService{
         post.setStatus(PostStatus.REVIEW);
         postRepository.save(post);
 
-        //TODO: RabitMQ to ReviewService
+        sendToReviewService(post);
     }
 
 
@@ -83,5 +95,10 @@ public class PostService implements IPostService{
                 .dateCreated(post.getDateCreated())
                 .status(post.getStatus())
                 .build();
+    }
+    private void sendToReviewService(Post post) {
+        rabbitTemplate.convertAndSend("post-to-review-queue", RabbitPostResponse.builder()
+                .id(post.getId())
+                .build());
     }
 }

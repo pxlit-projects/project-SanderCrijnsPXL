@@ -28,7 +28,7 @@ spring:
         - id: ReviewService
           uri: lb://ReviewService
           predicates:
-            - Path=/api/reviews/**
+            - Path=/api/review/**
           filters:
             #            - RewritePath=/employee/(?<path>.*), /$\{path}
             - DedupeResponseHeader=Access-Control-Allow-Origin

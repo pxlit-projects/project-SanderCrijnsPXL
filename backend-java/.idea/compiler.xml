@@ -9,12 +9,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="CommentService" />
         <module name="ConfigService" />
+        <module name="PostService" />
         <module name="DiscoveryService" />
         <module name="ReviewService" />
-        <module name="PostService" />
         <module name="GatewayService" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="MessagingService" target="21" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
@@ -23,6 +26,7 @@
       <module name="DiscoveryService" options="-parameters" />
       <module name="EditorialSpring" options="" />
       <module name="GatewayService" options="-parameters" />
+      <module name="MessagingService" options="-parameters" />
       <module name="PostService" options="-parameters" />
       <module name="ReviewService" options="-parameters" />
     </option>
