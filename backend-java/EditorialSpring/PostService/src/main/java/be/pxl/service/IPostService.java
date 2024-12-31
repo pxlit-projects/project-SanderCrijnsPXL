@@ -3,6 +3,7 @@ package be.pxl.service;
 import be.pxl.domain.request.ChangeContentRequest;
 import be.pxl.domain.request.PostRequest;
 import be.pxl.domain.response.PostResponse;
+import be.pxl.domain.response.PublishedPostResponse;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface IPostService {
 
     PostResponse changeContent(Long id, ChangeContentRequest changeContentRequest);
 
-    List<PostResponse> getPublishedPosts();
+    List<PublishedPostResponse> getPublishedPosts();
 
     void addToReview(Long id);
 

@@ -1,10 +1,10 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { PostService } from '../../services/post.service';
-import { Post } from '../../models/post.model';
 import { PostItemComponent } from "../../components/post-item/post-item.component";
 import { CommonModule } from '@angular/common';
 import { PostFilterComponent } from '../../components/post-filter/post-filter.component';
 import { PostItemButtonsComponent } from "../../components/post-item-buttons/post-item-buttons.component";
+import { PublishedPost } from '../../models/published-post.model';
 
 @Component({
   selector: 'app-post-overview',
@@ -15,8 +15,8 @@ import { PostItemButtonsComponent } from "../../components/post-item-buttons/pos
 })
 export class PostOverviewComponent implements OnInit {
   postService: PostService = inject(PostService);
-  posts: Post[] = [];
-  filteredPosts: Post[] = [];
+  posts: PublishedPost[] = [];
+  filteredPosts: PublishedPost[] = [];
 
   ngOnInit(): void {
     this.postService.getPublishedPosts().subscribe(

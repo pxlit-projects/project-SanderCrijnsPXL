@@ -3,6 +3,7 @@ package be.pxl.service;
 import be.pxl.domain.Comment;
 import be.pxl.domain.request.CommentRequest;
 import be.pxl.domain.request.EditCommentRequest;
+import be.pxl.domain.response.CommentFeignResponse;
 import be.pxl.domain.response.CommentResponse;
 import be.pxl.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,9 +22,9 @@ public class CommentService implements ICommentService{
     }
 
     @Override
-    public List<CommentResponse> getCommentsForPost(Long id) {
-        List<CommentResponse> comments = commentRepository.findAllByPostId(id).stream()
-                .map(this::mapCommentToCommentResponse)
+    public List<CommentFeignResponse> getCommentsForPost(Long id) {
+        List<CommentFeignResponse> comments = commentRepository.findAllByPostId(id).stream()
+                .map(this::mapCommentToCommentFeignResponse)
                 .toList();
         return comments;
     }
@@ -59,4 +60,13 @@ public class CommentService implements ICommentService{
                 .author(comment.getAuthor())
                 .build();
     }
+
+    private CommentFeignResponse mapCommentToCommentFeignResponse(Comment comment) {
+        return CommentFeignResponse.builder()
+                .id(comment.getId())
+                .content(comment.getContent())
+                .author(comment.getAuthor())
+                .build();
+    }
+
 }

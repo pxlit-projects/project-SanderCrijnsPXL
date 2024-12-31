@@ -1,5 +1,6 @@
 package be.pxl.service;
 
+import be.pxl.client.CommentClient;
 import be.pxl.domain.Post;
 import be.pxl.domain.PostStatus;
 import be.pxl.domain.request.*;
@@ -18,6 +19,7 @@ import java.util.List;
 public class PostService implements IPostService{
     private final PostRepository postRepository;
     private final RabbitTemplate rabbitTemplate;
+    private final CommentClient commentClient;
 
     @RabbitListener(queues = "review-to-post-queue")
     public void receivePost(RabbitReviewPostRequest request) {
@@ -48,10 +50,14 @@ public class PostService implements IPostService{
     }
 
     @Override
-    public List<PostResponse> getPublishedPosts() {
+    public List<PublishedPostResponse> getPublishedPosts() {
         List<Post> posts = postRepository.findAll();
         posts = posts.stream().filter(post -> post.getStatus() == PostStatus.PUBLISHED).toList();
-        return posts.stream().map(this::mapToPostResponse).toList();
+        List<PublishedPostResponse> publishedPosts = posts.stream().map(post -> {
+            List<CommentResponse> comments = commentClient.getCommentsForPost(post.getId());
+            return mapToPublishedPostResponse(post, comments);
+        }).toList();
+        return publishedPosts;
     }
 
     @Override
@@ -94,6 +100,17 @@ public class PostService implements IPostService{
                 .content(post.getContent())
                 .dateCreated(post.getDateCreated())
                 .status(post.getStatus())
+                .build();
+    }
+
+    private PublishedPostResponse mapToPublishedPostResponse(Post post, List<CommentResponse> comments) {
+        return PublishedPostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .author(post.getAuthor())
+                .content(post.getContent())
+                .dateCreated(post.getDateCreated())
+                .comments(comments)
                 .build();
     }
     private void sendToReviewService(Post post) {

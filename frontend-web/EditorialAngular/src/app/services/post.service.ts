@@ -5,6 +5,7 @@ import { environment } from '../../environments/environment.development';
 import { Post } from '../models/post.model';
 import { PostRequest } from '../models/request/post-request.model';
 import { ChangeContentRequest } from '../models/request/change-content-request.model';
+import { PublishedPost } from '../models/published-post.model';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +22,12 @@ export class PostService {
     return this.http.get<Post[]>(getPostsUrl);
   }
 
-  public getPublishedPosts(): Observable<Post[]> {
+  public getPublishedPosts(): Observable<PublishedPost[]> {
     const getPostsUrl = this.apiUrl + '/published'; 
     
     console.log('Fetching posts from:', getPostsUrl);
     
-    return this.http.get<Post[]>(getPostsUrl);
+    return this.http.get<PublishedPost[]>(getPostsUrl);
   }
 
   public getPostsToReview(): Observable<Post[]> {

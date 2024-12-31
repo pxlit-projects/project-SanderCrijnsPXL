@@ -13,10 +13,10 @@ export class CommentService {
   apiUrl = environment.apiUrl + '/comments';
   http: HttpClient = inject(HttpClient);
 
-  public getCommentsForPost(postId: number): Observable<Comment[]> {
-    console.log('getCommentsForPost');
-    return this.http.get<Comment[]>(`${this.apiUrl}/${postId}`);
-  }
+  // public getCommentsForPost(postId: number): Observable<Comment[]> {
+  //   console.log('getCommentsForPost');
+  //   return this.http.get<Comment[]>(`${this.apiUrl}/${postId}`);
+  // }
 
   public addCommentToPost(postId: number, comment: CommentRequest): Observable<void> {
     console.log('addCommentToPost');

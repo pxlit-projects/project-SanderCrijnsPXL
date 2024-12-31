@@ -8,7 +8,7 @@
       @for (post of filteredPosts; track post.title) {
         <div class="post-container">
           <app-post-item [post]="post" class="post-item"></app-post-item>
-          <app-post-item-buttons [postId]="post.id"></app-post-item-buttons>
+          <app-post-item-buttons [postId]="post.id" [comments]="post.comments"></app-post-item-buttons>
         </div>
       }
     }

@@ -3,6 +3,7 @@ package be.pxl.controller;
 import be.pxl.domain.request.ChangeContentRequest;
 import be.pxl.domain.request.PostRequest;
 import be.pxl.domain.response.PostResponse;
+import be.pxl.domain.response.PublishedPostResponse;
 import be.pxl.service.IPostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,8 @@ public class PostController {
     private final IPostService postService;
 
     @GetMapping("/published")
-    public ResponseEntity<List<PostResponse>> getPublishedPosts() {
-        List<PostResponse> response = postService.getPublishedPosts();
+    public ResponseEntity<List<PublishedPostResponse>> getPublishedPosts() {
+        List<PublishedPostResponse> response = postService.getPublishedPosts();
         return ResponseEntity.ok(response);
     }
 

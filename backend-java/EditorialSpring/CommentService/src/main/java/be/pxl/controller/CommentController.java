@@ -1,8 +1,8 @@
 package be.pxl.controller;
 
-import be.pxl.domain.request.CommentRequest;
-import be.pxl.domain.request.EditCommentRequest;
-import be.pxl.domain.response.CommentResponse;
+import be.pxl.domain.request.*;
+import be.pxl.domain.response.*;
+
 import be.pxl.service.ICommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,8 +19,8 @@ public class CommentController {
     private final ICommentService commentService;
 
     @GetMapping("/{postId}")
-    public ResponseEntity<List<CommentResponse>> getCommentsForPost(@PathVariable Long postId) {
-        List<CommentResponse> response = commentService.getCommentsForPost(postId);
+    public ResponseEntity<List<CommentFeignResponse>> getCommentsForPost(@PathVariable Long postId) {
+        List<CommentFeignResponse> response = commentService.getCommentsForPost(postId);
         return ResponseEntity.ok(response);
     }
 

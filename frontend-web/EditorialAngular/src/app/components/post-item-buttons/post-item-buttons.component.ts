@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommentRequest } from '../../models/request/comment-request.model';
 import { CommentService } from '../../services/comment.service';
 import { FormsModule } from '@angular/forms';
+import { Comment } from '../../models/comment.model';
 
 @Component({
   selector: 'app-post-item-buttons',
@@ -12,9 +13,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class PostItemButtonsComponent {
   @Input() postId!: number;
+  @Input() comments!: Comment[];
   showCommentBox = false;
+  showComments = false;
   commentRequest = new CommentRequest('', '');
-  comments: any[] = [];
 
   constructor(private commentService: CommentService) {}
 
@@ -22,17 +24,15 @@ export class PostItemButtonsComponent {
     this.showCommentBox = !this.showCommentBox;
   }
 
+  toggleComments() {
+    this.showComments = !this.showComments;
+  }
+
   submitComment() {
     this.commentService.addCommentToPost(this.postId, this.commentRequest).subscribe(() => {
       alert('Comment added successfully!');
       this.showCommentBox = false;
       this.commentRequest.content = '';
-    });
-  }
-
-  getComments() {
-    this.commentService.getCommentsForPost(this.postId).subscribe((response) => {
-      this.comments = response;
     });
   }
 
