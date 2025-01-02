@@ -3,9 +3,10 @@
     gap: 15px;
     justify-content: center;
     margin-bottom: 30px;
+    flex-wrap: wrap;
 }
 
-.filter-section input {
+.filter-section input, .clear-button {
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 6px;
@@ -17,10 +18,26 @@
     color: white;
     cursor: pointer;
     border: none;
-    border-radius: 6px;
     transition: background-color 0.3s ease;
 }
 
 .clear-button:hover {
     background-color: #e63939;
+}
+
+@media (max-width: 768px) {
+    .filter-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .filter-section input, .clear-button {
+        width: 80%;
+    }
+}
+
+@media (max-width: 480px) {
+    .filter-section input, .clear-button {
+        width: 100%;
+    }
 }
