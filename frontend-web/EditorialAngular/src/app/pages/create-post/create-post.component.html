@@ -1,4 +1,8 @@
-<div class="create-post-container">
+@if (isAuthorized() === false) {
+    <p class="no-posts">Unauthorized</p>
+}
+@else {
+    <div class="create-post-container">
     <h1>Create a new post</h1>
     <form #postForm="ngForm">
 
@@ -23,3 +27,4 @@
         </div>
     </form>
 </div>
+}

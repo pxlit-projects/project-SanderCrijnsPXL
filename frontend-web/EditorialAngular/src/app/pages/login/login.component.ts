@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -17,7 +17,8 @@ export class LoginComponent {
   };
 
   onSubmit() {
-    localStorage.setItem('loginData', JSON.stringify(this.loginData));
+    localStorage.setItem('role', this.loginData.role);
+    localStorage.setItem('username', this.loginData.username);
     this.router.navigate(['/published-posts']);
   }
 }

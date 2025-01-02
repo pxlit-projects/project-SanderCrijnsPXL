@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CommentRequest } from '../models/request/comment-request.model';
 
@@ -12,11 +12,6 @@ export class CommentService {
 
   apiUrl = environment.apiUrl + '/comments';
   http: HttpClient = inject(HttpClient);
-
-  // public getCommentsForPost(postId: number): Observable<Comment[]> {
-  //   console.log('getCommentsForPost');
-  //   return this.http.get<Comment[]>(`${this.apiUrl}/${postId}`);
-  // }
 
   public addCommentToPost(postId: number, comment: CommentRequest): Observable<void> {
     console.log('addCommentToPost');

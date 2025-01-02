@@ -38,18 +38,34 @@ export class PostItemButtonsComponent {
   }
 
   editComment(comment: any) {
-    const newContent = prompt('Edit your comment:', comment.content);
-    if (newContent) {
-      const editRequest = { ...comment, content: newContent };
-      this.commentService.editComment(comment.id, editRequest).subscribe(() => {
-        comment.content = newContent;
-      });
+    if(this.isAuthor(comment)) {
+      return alert('You can only edit your own comments!');
+    }
+    else{
+      const newContent = prompt('Edit your comment:', comment.content);
+      if (newContent) {
+        const editRequest = { ...comment, content: newContent };
+        this.commentService.editComment(comment.id, editRequest).subscribe(() => {
+          comment.content = newContent;
+        });
+      }
     }
   }
 
-  deleteComment(commentId: number) {
-    this.commentService.deleteComment(commentId).subscribe(() => {
-      this.comments = this.comments.filter(c => c.id !== commentId);
-    });
+  deleteComment(comment: any) {
+    if(this.isAuthor(comment)) {
+      return alert('You can only edit your own comments!');
+    }
+    else{
+      this.commentService.deleteComment(comment.id).subscribe(() => {
+        this.comments = this.comments.filter(c => c.id !== comment.id);
+      });
+    }
+    
   }
+
+  private isAuthor (comment: any) : boolean {
+    return comment.author.toLowerCase() !== localStorage.getItem('username')?.toLowerCase()
+  }
+
 }

@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of, timeout } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Post } from '../models/post.model';
@@ -14,12 +14,19 @@ export class PostService {
   apiUrl = environment.apiUrl + '/posts';
   http: HttpClient = inject(HttpClient);
 
+  private getAuthHeaders(): HttpHeaders {
+      const role = localStorage.getItem('role') || 'user';
+      return new HttpHeaders({
+        'Authorization': `${role}`
+      });
+    }
+
   public getAllPosts(): Observable<Post[]> {
     const getPostsUrl = this.apiUrl + '/all'; 
     
     console.log('Fetching posts from:', getPostsUrl);
     
-    return this.http.get<Post[]>(getPostsUrl);
+    return this.http.get<Post[]>(getPostsUrl, { headers: this.getAuthHeaders() });
   }
 
   public getPublishedPosts(): Observable<PublishedPost[]> {
@@ -35,13 +42,13 @@ export class PostService {
     
     console.log('Fetching posts from:', getPostsUrl);
     
-    return this.http.get<Post[]>(getPostsUrl);
+    return this.http.get<Post[]>(getPostsUrl, { headers: this.getAuthHeaders() });
   }
 
   public createPost(postRequest: PostRequest): Observable<void> {
     console.log('Creating post at:', this.apiUrl);
     
-    return this.http.post<void>(this.apiUrl, postRequest).pipe(
+    return this.http.post<void>(this.apiUrl, postRequest, { headers: this.getAuthHeaders() }).pipe(
       catchError((error) => {
         console.error('Error creating post:', error);
         return of();
@@ -54,7 +61,7 @@ export class PostService {
     
     console.log('Changing content of post at:', changeContentUrl);
     
-    return this.http.patch<Post>(changeContentUrl, changeContentRequest).pipe(
+    return this.http.patch<Post>(changeContentUrl, changeContentRequest, { headers: this.getAuthHeaders() } ).pipe(
       catchError((error) => {
         console.error('Error changing post content:', error);
         return of();

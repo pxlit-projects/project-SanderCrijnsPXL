@@ -19,6 +19,10 @@ import java.util.List;
 public class PostController {
     private final IPostService postService;
 
+    private boolean isAuthorized(String authorizationHeader) {
+        return "editor".equals(authorizationHeader);
+    }
+
     @GetMapping("/published")
     public ResponseEntity<List<PublishedPostResponse>> getPublishedPosts() {
         List<PublishedPostResponse> response = postService.getPublishedPosts();
@@ -26,25 +30,37 @@ public class PostController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<PostResponse>> getAllPosts() {
+    public ResponseEntity<List<PostResponse>> getAllPosts(@RequestHeader(value = "Authorization") String authorizationHeader) {
+        if (!isAuthorized(authorizationHeader)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         List<PostResponse> response = postService.getAllPosts();
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/openForReview")
-    public ResponseEntity<List<PostResponse>> getPostsToReview() {
+    public ResponseEntity<List<PostResponse>> getPostsToReview(@RequestHeader(value = "Authorization") String authorizationHeader) {
+        if (!isAuthorized(authorizationHeader)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         List<PostResponse> response = postService.getPostsToReview();
         return ResponseEntity.ok(response);
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public void addPost(@RequestBody PostRequest postRequest) {
+    public ResponseEntity<Void> addPost(@RequestBody PostRequest postRequest, @RequestHeader(value = "Authorization") String authorizationHeader) {
+        if (!isAuthorized(authorizationHeader)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         postService.addPost(postRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("/{id}/changeContent")
-    public ResponseEntity<PostResponse> changeContent(@RequestBody ChangeContentRequest changeContentRequest, @PathVariable Long id) {
+    public ResponseEntity<PostResponse> changeContent(@RequestBody ChangeContentRequest changeContentRequest, @PathVariable Long id, @RequestHeader(value = "Authorization") String authorizationHeader) {
+        if (!isAuthorized(authorizationHeader)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         try {
             PostResponse response = postService.changeContent(id, changeContentRequest);
             return ResponseEntity.ok(response);
@@ -53,7 +69,10 @@ public class PostController {
         }
     }
     @PatchMapping("/{id}/add-to-review")
-    public ResponseEntity<Void> addToReview(@PathVariable Long id) {
+    public ResponseEntity<Void> addToReview(@PathVariable Long id, @RequestHeader(value = "Authorization") String authorizationHeader) {
+        if (!isAuthorized(authorizationHeader)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
         try {
             postService.addToReview(id);
             return ResponseEntity.ok().build();

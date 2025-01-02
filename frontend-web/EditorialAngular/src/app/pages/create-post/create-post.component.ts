@@ -56,4 +56,10 @@ export class CreatePostComponent {
       status: PostStatus.CONCEPT
     };
   }
+
+  isAuthorized(): boolean {
+    console.log('Role:', localStorage.getItem('role'));
+    console.log('Is editor:', localStorage.getItem('role') === 'editor');
+    return localStorage.getItem('role') === 'editor';
+  }
 }

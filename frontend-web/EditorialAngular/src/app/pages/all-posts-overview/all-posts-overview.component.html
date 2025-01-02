@@ -1,7 +1,11 @@
 <div class="post-overview">
   <h1 class="overview-title">All posts</h1>
 
-  @if (groupedPosts['CONCEPT'].length > 0) {
+  @if (isAuthorized() === false) {
+    <p class="no-posts">Unauthorized</p>
+  }
+
+  @else if (groupedPosts['CONCEPT'].length > 0) {
   <h2 class="status-title">Concept</h2>
   <div class="post-grid">
     @for (post of groupedPosts['CONCEPT']; track post.id) {
@@ -11,7 +15,7 @@
     }
   </div>
   }
-  @if (groupedPosts['REVIEW'].length > 0) {
+  @else if (groupedPosts['REVIEW'].length > 0) {
   <h2 class="status-title">Review</h2>
   <div class="post-grid">
     @for (post of groupedPosts['REVIEW']; track post.id) {
@@ -21,7 +25,7 @@
     }
   </div>
   }
-  @if (groupedPosts['PUBLISHED'].length > 0) {
+  @else if (groupedPosts['PUBLISHED'].length > 0) {
   <h2 class="status-title">Published</h2>
   <div class="post-grid">
     @for (post of groupedPosts['PUBLISHED']; track post.id) {
@@ -31,7 +35,7 @@
     }
   </div>
   }
-  @if (posts.length === 0) {
+  @else if (posts.length === 0) {
   <p class="no-posts">No posts found</p>
   }
 </div>

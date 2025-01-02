@@ -33,3 +33,11 @@ button {
 button:hover {
     opacity: 0.9;
 }
+
+.no-posts {
+    grid-column: span 3;
+    font-size: 1.2rem;
+    color: #777;
+    text-align: center;
+    margin-top: 20px;
+}

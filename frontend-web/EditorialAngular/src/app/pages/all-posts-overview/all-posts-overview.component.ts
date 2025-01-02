@@ -42,4 +42,10 @@ export class AllPostsOverviewComponent {
   navigateToEdit(post: Post): void {
     this.router.navigate(['/edit', post.id], {state: { title: post.title, content: post.content }});
   }
+
+  isAuthorized(): boolean {
+    console.log('Role:', localStorage.getItem('role'));
+    console.log('Is editor:', localStorage.getItem('role') === 'editor');
+    return localStorage.getItem('role') === 'editor';
+  }
 }

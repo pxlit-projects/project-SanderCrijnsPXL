@@ -1,6 +1,9 @@
 <h1 class="overview-title">Posts to review</h1>
 <div class="post-grid">
-    @if (posts.length > 0) {
+    @if (isAuthorized() === false) {
+      <p class="no-posts">Unauthorized</p>
+    }
+    @else if (posts.length > 0) {
       @for (post of posts; track post.title) {
         <div class="post-container">
           <app-post-item [post]="post" class="post-item"></app-post-item>
