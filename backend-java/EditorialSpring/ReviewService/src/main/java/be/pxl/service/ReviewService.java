@@ -107,7 +107,7 @@ public class ReviewService implements IReviewService {
         log.info("Sending email to notify user of post status update");
         String subject = "Post Review Status Update";
         String recipient = "sander.crijns@student.pxl.be";
-        String message = String.format("Post with Title %d, ID %d has been %s.", post.getTitle(), post.getId(), post.getStatus().toString().toLowerCase());
+        String message = String.format("Post with Title %s, ID %d has been %s.", post.getTitle(), post.getId(), post.getStatus().toString().toLowerCase());
 
         try {
             MimeMessage mail = mailSender.createMimeMessage();
