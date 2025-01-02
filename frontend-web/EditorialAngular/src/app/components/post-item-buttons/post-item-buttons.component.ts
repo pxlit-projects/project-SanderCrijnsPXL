@@ -34,6 +34,7 @@ export class PostItemButtonsComponent {
       this.showCommentBox = false;
       this.commentRequest.content = '';
     });
+    window.location.reload();
   }
 
   editComment(comment: any) {
