@@ -9,6 +9,8 @@ import be.pxl.repository.ReviewRepository;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -23,35 +25,43 @@ public class ReviewService implements IReviewService {
     private final ReviewRepository reviewRepository;
     private final RabbitTemplate rabbitTemplate;
     private final JavaMailSender mailSender;
+    private static final Logger log = LoggerFactory.getLogger(ReviewService.class);
 
     @RabbitListener(queues = "post-to-review-queue")
     public void receivePost(RabbitPostRequest post) {
+        log.info("Received post with ID {} for review", post.id());
         reviewRepository.save(mapRabbitPostRequestToPost(post));
+        log.info("Post with ID {} successfully saved for review", post.id());
     }
 
     @Override
     public void approvePost(Long id) {
+        log.info("Approving post with ID {}", id);
         Post post = reviewRepository.findById(id).orElseThrow();
         post.setStatus(ReviewStatus.ACCEPTED);
         reviewRepository.save(post);
 
         rabbitTemplate.convertAndSend("review-to-post-queue", mapPostToRabbitPostResponse(post));
 
+        log.info("Post with ID {} successfully approved", id);
         sendEmail(post);
     }
 
     @Override
     public void rejectPost(Long id, String comment) {
+        log.info("Rejecting post with ID {}", id);
         Post post = reviewRepository.findById(id).orElseThrow();
         post.setStatus(ReviewStatus.REJECTED);
         post.setComment(comment);
         reviewRepository.save(post);
 
+        log.info("Post with ID {} successfully rejected", id);
         sendEmail(post);
     }
 
     @Override
     public List<PostResponse> getPostsToReview() {
+        log.info("Retrieving posts to review");
         List<PostResponse> listPending  = reviewRepository.findAllByStatus(ReviewStatus.PENDING).stream()
                 .map(this::mapPostToPostResponse)
                 .toList();
@@ -94,6 +104,7 @@ public class ReviewService implements IReviewService {
     }
 
     private void sendEmail(Post post) {
+        log.info("Sending email to notify user of post status update");
         String subject = "Post Review Status Update";
         String recipient = "sander.crijns@student.pxl.be";
         String message = String.format("Post with Title %d, ID %d has been %s.", post.getTitle(), post.getId(), post.getStatus().toString().toLowerCase());
@@ -107,9 +118,9 @@ public class ReviewService implements IReviewService {
             helper.setText(message, false);
 
             mailSender.send(mail);
-            System.out.println("Email sent successfully to " + recipient);
+            log.info("Email sent successfully to {}", recipient);
         } catch (MessagingException e) {
-            System.err.println("Failed to send email: " + e.getMessage());
+            log.error("Failed to send email: {}", e.getMessage());
         }
     }
 }

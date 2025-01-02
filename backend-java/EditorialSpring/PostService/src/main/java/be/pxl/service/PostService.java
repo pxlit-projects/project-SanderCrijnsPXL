@@ -7,6 +7,8 @@ import be.pxl.domain.request.*;
 import be.pxl.domain.response.*;
 import be.pxl.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
@@ -20,21 +22,26 @@ public class PostService implements IPostService{
     private final PostRepository postRepository;
     private final RabbitTemplate rabbitTemplate;
     private final CommentClient commentClient;
+    private static final Logger log = LoggerFactory.getLogger(PostService.class);
 
     @RabbitListener(queues = "review-to-post-queue")
     public void receivePost(RabbitReviewPostRequest request) {
+        log.info("Received post with ID {} for review", request.id());
         Post post = postRepository.findById(request.id()).orElseThrow();
         if (request.status().equals("ACCEPTED")) {
             post.setStatus(PostStatus.PUBLISHED);
         }
         postRepository.save(post);
+        log.info("Post with ID {} successfully saved", request.id());
     }
 
 
     @Override
     public void addPost(PostRequest postRequest) {
+        log.info("Adding post");
         Post post = mapToPost(postRequest);
         postRepository.save(post);
+        log.info("Post successfully added");
         if (postRequest.status() == PostStatus.REVIEW) {
             sendToReviewService(post);
         }
@@ -42,15 +49,18 @@ public class PostService implements IPostService{
 
     @Override
     public PostResponse changeContent(Long id, ChangeContentRequest changeContentRequest) {
+        log.info("Changing content of post with ID {}", id);
         Post post = postRepository.findById(id).orElseThrow();
         post.setTitle(changeContentRequest.title());
         post.setContent(changeContentRequest.content());
         postRepository.save(post);
+        log.info("Content of post with ID {} successfully changed", id);
         return mapToPostResponse(post);
     }
 
     @Override
     public List<PublishedPostResponse> getPublishedPosts() {
+        log.info("Retrieving published posts");
         List<Post> posts = postRepository.findAll();
         posts = posts.stream().filter(post -> post.getStatus() == PostStatus.PUBLISHED).toList();
         List<PublishedPostResponse> publishedPosts = posts.stream().map(post -> {
@@ -62,12 +72,14 @@ public class PostService implements IPostService{
 
     @Override
     public List<PostResponse> getAllPosts() {
+        log.info("Retrieving all posts");
         List<Post> posts = postRepository.findAll();
         return posts.stream().map(this::mapToPostResponse).toList();
     }
 
     @Override
     public List<PostResponse> getPostsToReview() {
+        log.info("Retrieving posts to review");
         List<Post> posts = postRepository.findAll();
         posts = posts.stream().filter(post -> post.getStatus() == PostStatus.REVIEW).toList();
         return posts.stream().map(this::mapToPostResponse).toList();
@@ -75,9 +87,11 @@ public class PostService implements IPostService{
 
     @Override
     public void addToReview(Long id) {
+        log.info("Adding post with ID {} to review", id);
         Post post = postRepository.findById(id).orElseThrow();
         post.setStatus(PostStatus.REVIEW);
         postRepository.save(post);
+        log.info("Post with ID {} successfully added to review", id);
 
         sendToReviewService(post);
     }
@@ -114,6 +128,7 @@ public class PostService implements IPostService{
                 .build();
     }
     private void sendToReviewService(Post post) {
+        log.info("Sending post with ID {} to review service", post.getId());
         rabbitTemplate.convertAndSend("post-to-review-queue", RabbitPostResponse.builder()
                 .id(post.getId())
                 .title(post.getTitle())
@@ -121,5 +136,6 @@ public class PostService implements IPostService{
                 .author(post.getAuthor())
                 .dateCreated(post.getDateCreated().toString())
                 .build());
+        log.info("Post with ID {} successfully sent to review service", post.getId());
     }
 }
