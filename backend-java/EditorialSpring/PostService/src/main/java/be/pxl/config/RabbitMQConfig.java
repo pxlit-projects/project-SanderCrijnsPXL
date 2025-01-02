@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class RabitMQConfig {
+public class RabbitMQConfig {
     @Bean
     public Queue postToReviewQueue() {
         return new Queue("post-to-review-queue", false);
