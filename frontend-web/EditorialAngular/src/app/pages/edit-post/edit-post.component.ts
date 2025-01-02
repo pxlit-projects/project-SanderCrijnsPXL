@@ -22,8 +22,8 @@ export class EditPostComponent {
 
   ngOnInit(): void {
     this.id = Number(this.route.snapshot.paramMap.get('id'));
-    this.title = window.history.state.title;
-    this.content = window.history.state.content;
+    this.title = window.history.state?.title || '';
+    this.content = window.history.state?.content || '';
     
   }
 

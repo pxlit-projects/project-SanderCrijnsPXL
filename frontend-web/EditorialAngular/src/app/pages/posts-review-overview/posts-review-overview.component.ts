@@ -1,6 +1,4 @@
 import { Component, inject } from '@angular/core';
-import { PostService } from '../../services/post.service';
-import { Post } from '../../models/post.model';
 import { PostItemComponent } from "../../components/post-item/post-item.component";
 import { ReviewButtonsComponent } from "../../components/review-buttons/review-buttons.component";
 import { ReviewService } from '../../services/review.service';
