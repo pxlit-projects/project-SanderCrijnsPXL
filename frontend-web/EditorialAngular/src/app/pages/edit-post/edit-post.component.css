@@ -1,4 +1,4 @@
-/* Container for the entire form */
+/* Container for the entire form 
 .edit-post-container {
   width: 100%;
   max-width: 600px;
@@ -16,7 +16,7 @@
   color: #333;
 }
 
-/* Style for the form */
+/* Style for the form 
 .edit-post-form {
   display: flex;
   flex-direction: column;
@@ -47,7 +47,7 @@
   border-color: #4b8cf5;
 }
 
-/* Action buttons at the bottom of the form */
+/* Action buttons at the bottom of the form 
 .form-actions {
   display: flex;
   justify-content: space-between;
@@ -86,7 +86,7 @@
   background-color: #ddd;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments 
 @media (max-width: 768px) {
   .edit-post-container {
       width: 90%;
@@ -125,4 +125,4 @@
   .form-input {
       font-size: 13px;
   }
-}
+}*/

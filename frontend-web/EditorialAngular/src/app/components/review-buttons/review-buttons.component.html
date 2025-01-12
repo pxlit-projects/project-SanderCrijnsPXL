@@ -1,13 +1,37 @@
-<div class="review-buttons">
-    <button class="approve-btn" (click)="approve()">Approve Post</button>
-    
-    <button class="reject-btn" (click)="toggleReject()">Reject Post</button>
-    
-    @if (showRejectForm) {
-      <div class="reject-form">
-        <label for="comment">Comment</label>
-        <textarea id="comment" [(ngModel)]="comment"></textarea>
-        <button type="submit" (click)="reject()">Submit</button>
-      </div>
-    }
+<div class="review-buttons space-y-4">
+  <!-- Approve Button -->
+  <button
+    class="approve-btn bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300"
+    (click)="approve()"
+  >
+    Approve Post
+  </button>
+
+  <!-- Reject Button -->
+  <button
+    class="reject-btn bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+    (click)="toggleReject()"
+  >
+    Reject Post
+  </button>
+
+  <!-- Reject Form -->
+  @if (showRejectForm) {
+    <div class="reject-form bg-gray-100 p-4 rounded-lg shadow-md mt-4">
+      <label for="comment" class="block text-gray-700 font-medium mb-2">Comment</label>
+      <textarea
+        id="comment"
+        [(ngModel)]="comment"
+        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+      ></textarea>
+
+      <button
+        type="submit"
+        (click)="reject()"
+        class="mt-4 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+      >
+        Submit
+      </button>
+    </div>
+  }
 </div>

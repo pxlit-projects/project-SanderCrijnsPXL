@@ -1,42 +1,55 @@
 @if (isAuthorized() === false) {
-  <p class="no-posts">Unauthorized</p>
+  <p class="no-posts text-red-500 text-center font-medium mt-4">Unauthorized</p>
 }
-<div class="edit-post-container">
-    <h1 class="edit-post-title">Edit Post</h1>
-  
-    <form class="edit-post-form" (ngSubmit)="saveChanges()">
-      <div class="form-group">
-        <label for="title" class="form-label">Title</label>
-        <input
-          type="text"
-          id="title"
-          class="form-input"
-          [(ngModel)]="title"
-          name="title"
-          required
-        />
-      </div>
-  
-      <div class="form-group">
-        <label for="content" class="form-label">Content</label>
-        <textarea
-          id="content"
-          class="form-input"
-          [(ngModel)]="content"
-          name="content"
-          required
-          rows="6"
-        ></textarea>
-      </div>
-  
-      <div class="form-actions">
-        <button type="submit" class="save-button" [disabled]="!title || !content">
-          Save Changes
-        </button>
-        <button type="button" class="cancel-button" (click)="router.navigate(['/all-posts'])">
-          Cancel
-        </button>
-      </div>
-    </form>
-  </div>
-  
+
+<div class="edit-post-container max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md mt-8">
+  <!-- Titel van de sectie -->
+  <h1 class="edit-post-title text-2xl font-bold text-gray-800 mb-6">Edit Post</h1>
+
+  <!-- Bewerken van post formulier -->
+  <form class="edit-post-form space-y-6" (ngSubmit)="saveChanges()">
+    <!-- Titel veld -->
+    <div class="form-group">
+      <label for="title" class="form-label block text-gray-700 font-medium mb-2">Title</label>
+      <input
+        type="text"
+        id="title"
+        class="form-input w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        [(ngModel)]="title"
+        name="title"
+        required
+      />
+    </div>
+
+    <!-- Content veld -->
+    <div class="form-group">
+      <label for="content" class="form-label block text-gray-700 font-medium mb-2">Content</label>
+      <textarea
+        id="content"
+        class="form-input w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        [(ngModel)]="content"
+        name="content"
+        required
+        rows="6"
+      ></textarea>
+    </div>
+
+    <!-- Actieknoppen -->
+    <div class="form-actions flex space-x-4">
+      <button
+        type="submit"
+        class="save-button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 disabled:opacity-50"
+        [disabled]="!title || !content"
+      >
+        Save Changes
+      </button>
+      <button
+        type="button"
+        class="cancel-button bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
+        (click)="router.navigate(['/all-posts'])"
+      >
+        Cancel
+      </button>
+    </div>
+  </form>
+</div>

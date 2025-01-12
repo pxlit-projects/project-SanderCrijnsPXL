@@ -1,4 +1,4 @@
-/* Container */
+/* Container 
 .post-overview {
     width: 100%;
     margin: 20px 0;
@@ -6,7 +6,7 @@
     box-sizing: border-box;
 }
 
-/* Title Styling */
+/* Title Styling 
 .overview-title {
     font-size: 2.5rem;
     text-align: center;
@@ -14,7 +14,7 @@
     color: #333;
 }
 
-/* Grid for Posts */
+/* Grid for Posts 
 .post-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -22,7 +22,7 @@
     justify-content: center;
 }
 
-/* Post Card Styling */
+/* Post Card Styling 
 .post-item {
     background-color: #fff;
     transition: transform 0.2s ease-in-out;
@@ -32,7 +32,7 @@
     transform: translateY(-5px);
 }
 
-/* No Posts Found Message */
+/* No Posts Found Message 
 .no-posts {
     grid-column: span 3;
     font-size: 1.2rem;
@@ -59,25 +59,25 @@
     text-align: center;
 }
 
-/* Responsive Breakpoints */
-
-/* 1 column for phones */
+/* Responsive Breakpoints 
+/* 1 column for phones 
 @media (max-width: 768px) {
     .post-grid {
         grid-template-columns: 1fr;
     }
 }
 
-/* 2 columns for tablets */
+/* 2 columns for tablets 
 @media (min-width: 769px) and (max-width: 999px) {
     .post-grid {
         grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* 3 columns for larger screens */
+/* 3 columns for larger screens 
 @media (min-width: 1000px) {
     .post-grid {
         grid-template-columns: repeat(3, 1fr);
     }
 }
+*/

@@ -33,7 +33,7 @@ export class EditPostComponent {
       this.postService.changeContent(this.id, changeContentRequest).subscribe((updatedPost) => {
         if (updatedPost) {
           console.log('Post updated successfully', updatedPost);
-          this.router.navigate(['/all-posts']);  // Navigate back to the posts list after saving
+          this.router.navigate(['/review']);
         } else {
           console.error('Failed to update the post');
         }

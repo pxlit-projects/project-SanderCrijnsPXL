@@ -1,34 +1,82 @@
-<div class="post-item-buttons">
-    <button class="comment-btn" (click)="toggleCommentBox()">Add Comment</button>
-    <button class="show-comments-btn" (click)="toggleComments()">Show Comments</button>
-
+<div class="post-item-buttons space-y-4">
+    <!-- Add Comment Button -->
+    <button
+      class="comment-btn bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+      (click)="toggleCommentBox()"
+    >
+      Add Comment
+    </button>
+  
+    <!-- Show Comments Button -->
+    <button
+      class="show-comments-btn bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300"
+      (click)="toggleComments()"
+    >
+      Show Comments
+    </button>
+  
+    <!-- Comment Box -->
     @if (showCommentBox) {
-    <div class="comment-box">
-        <label for="comment">Comment</label>
-        <textarea id="comment" [(ngModel)]="commentRequest.content" required></textarea>
-        <label for="author">Author</label>
-        <input name="author" type="text" id="author" [(ngModel)]="commentRequest.author" required />
-        <button type="submit" [disabled]="commentRequest.content === '' || !commentRequest.author"
-            (click)="submitComment()">Submit</button>
-    </div>
+      <div class="comment-box bg-gray-100 p-4 rounded-lg shadow-md">
+        <label for="comment" class="block text-gray-700 font-medium mb-2">Comment</label>
+        <textarea
+          id="comment"
+          [(ngModel)]="commentRequest.content"
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        ></textarea>
+  
+        <label for="author" class="block text-gray-700 font-medium mt-4 mb-2">Author</label>
+        <input
+          name="author"
+          type="text"
+          id="author"
+          [(ngModel)]="commentRequest.author"
+          required
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+        />
+  
+        <button
+          type="submit"
+          [disabled]="commentRequest.content === '' || !commentRequest.author"
+          (click)="submitComment()"
+          class="mt-4 bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300 disabled:opacity-50"
+        >
+          Submit
+        </button>
+      </div>
     }
-
+  
+    <!-- Comments List -->
     @if (showComments) {
-        @if (comments.length > 0) {
-        <div class="comments-list">
-            @for (comment of comments; track comment.id) {
-            <div class="comment-item">
-                <p>{{ comment.content }} - <i>{{ comment.author }}</i></p>
-                <button (click)="editComment(comment)">✏️</button>
-                <button (click)="deleteComment(comment)">🗑️</button>
+      @if (comments.length > 0) {
+        <div class="comments-list space-y-4 mt-4">
+          @for (comment of comments; track comment.id) {
+            <div class="comment-item bg-gray-50 p-4 rounded-lg shadow-sm">
+              <p class="text-gray-700">
+                {{ comment.content }} - <i class="text-gray-500">{{ comment.author }}</i>
+              </p>
+              <div class="flex space-x-2 mt-2">
+                <button
+                  (click)="editComment(comment)"
+                  class="bg-yellow-500 text-white px-3 py-1 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+                >
+                  ✏️ Edit
+                </button>
+                <button
+                  (click)="deleteComment(comment)"
+                  class="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
+                >
+                  🗑️ Delete
+                </button>
+              </div>
             </div>
-            }
+          }
         </div>
-        }
-        @else {
-            <div class="comments-list">
-                <p>No comments yet</p>
-            </div>
-        }
+      } @else {
+        <div class="comments-list mt-4">
+          <p class="text-gray-500">No comments yet</p>
+        </div>
+      }
     }
-</div>
+  </div>  

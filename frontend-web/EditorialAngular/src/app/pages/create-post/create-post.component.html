@@ -1,30 +1,68 @@
 @if (isAuthorized() === false) {
-    <p class="no-posts">Unauthorized</p>
-}
-@else {
-    <div class="create-post-container">
-    <h1>Create a new post</h1>
-    <form #postForm="ngForm">
-
+    <p class="no-posts text-red-500 text-center font-medium mt-4">Unauthorized</p>
+  }
+  @else {
+    <div class="create-post-container max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md mt-8">
+      <!-- Form Title -->
+      <h1 class="text-2xl font-bold text-gray-800 mb-6">Create a New Post</h1>
+  
+      <form #postForm="ngForm" class="space-y-6">
+        <!-- Title Input -->
         <div class="form-group">
-            <label for="title">Title</label>
-            <input type="text" id="title" name="title" [(ngModel)]="postRequest.title" required />
+          <label for="title" class="block text-gray-700 font-medium mb-2">Title</label>
+          <input
+            type="text"
+            id="title"
+            name="title"
+            [(ngModel)]="postRequest.title"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
         </div>
-
+  
+        <!-- Content Textarea -->
         <div class="form-group">
-            <label for="content">Content</label>
-            <textarea id="content" name="content" [(ngModel)]="postRequest.content" required></textarea>
+          <label for="content" class="block text-gray-700 font-medium mb-2">Content</label>
+          <textarea
+            id="content"
+            name="content"
+            [(ngModel)]="postRequest.content"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            rows="6"
+          ></textarea>
         </div>
-
+  
+        <!-- Author Input -->
         <div class="form-group">
-            <label for="author">Author</label>
-            <input type="text" id="author" name="author" [(ngModel)]="postRequest.author" required />
+          <label for="author" class="block text-gray-700 font-medium mb-2">Author</label>
+          <input
+            type="text"
+            id="author"
+            name="author"
+            [(ngModel)]="postRequest.author"
+            required
+            class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
         </div>
-
-        <div class="button-group">
-            <button type="button" (click)="saveAsConcept()">Save as Concept</button>
-            <button type="submit" (click)="sendToReview()">Send to Review</button>
+  
+        <!-- Buttons -->
+        <div class="button-group flex space-x-4">
+          <button
+            type="button"
+            (click)="saveAsConcept()"
+            class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+          >
+            Save as Concept
+          </button>
+          <button
+            type="submit"
+            (click)="sendToReview()"
+            class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          >
+            Send to Review
+          </button>
         </div>
-    </form>
-</div>
-}
+      </form>
+    </div>
+  }

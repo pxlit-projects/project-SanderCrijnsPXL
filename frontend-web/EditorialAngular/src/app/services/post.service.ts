@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, Observable, of, timeout } from 'rxjs';
+import { catchError, Observable, of, throwError, timeout } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { Post } from '../models/post.model';
 import { PostRequest } from '../models/request/post-request.model';
@@ -65,6 +65,17 @@ export class PostService {
       catchError((error) => {
         console.error('Error changing post content:', error);
         return of();
+      })
+    );
+  }
+
+  public addToReview(id: number): Observable<void> {
+    const addToReviewUrl = `${this.apiUrl}/${id}/add-to-review`;
+    console.log('Adding post to review at:', addToReviewUrl);
+    return this.http.patch<void>(addToReviewUrl, null, { headers: this.getAuthHeaders() }).pipe(
+      catchError((error) => {
+        console.error('Error adding post to review:', error);
+        return throwError(() => error);
       })
     );
   }

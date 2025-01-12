@@ -43,6 +43,18 @@ export class AllPostsOverviewComponent {
     this.router.navigate(['/edit', post.id], {state: { title: post.title, content: post.content }});
   }
 
+  addToReview(postId: number): void {
+    this.postService.addToReview(postId).subscribe({
+      next: () => {
+        console.log(`Post ${postId} added to review.`);
+        this.router.navigate(['/review']);
+      },
+      error: (error) => {
+        console.error(`Failed to add post ${postId} to review:`, error);
+      },
+    });
+  }
+
   isAuthorized(): boolean {
     console.log('Role:', localStorage.getItem('role'));
     console.log('Is editor:', localStorage.getItem('role') === 'editor');

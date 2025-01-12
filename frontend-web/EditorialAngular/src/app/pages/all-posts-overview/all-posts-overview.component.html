@@ -1,41 +1,65 @@
-<div class="post-overview">
-  <h1 class="overview-title">All posts</h1>
+<div class="post-overview space-y-8">
+  <!-- Overview Title -->
+  <h1 class="overview-title text-3xl font-bold text-gray-800">All posts</h1>
 
+  <!-- Unauthorized Message -->
   @if (isAuthorized() === false) {
-    <p class="no-posts">Unauthorized</p>
+    <p class="no-posts text-red-500 font-medium">Unauthorized</p>
   }
 
+  <!-- Concept Posts -->
   @else if (groupedPosts['CONCEPT'].length > 0) {
-  <h2 class="status-title">Concept</h2>
-  <div class="post-grid">
-    @for (post of groupedPosts['CONCEPT']; track post.id) {
-    <a (click)="navigateToEdit(post)">
-      <app-post-item [post]="post" class="post-item"></app-post-item>
-    </a>
-    }
-  </div>
+    <h2 class="status-title text-2xl font-semibold text-gray-700">Concept</h2>
+    <div class="post-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (post of groupedPosts['CONCEPT']; track post.id) {
+        <div>
+            <a
+            (click)="navigateToEdit(post)"
+          >
+            <app-post-item [post]="post" class="post-item"></app-post-item>
+          </a>
+
+          <button
+            (click)="addToReview(post.id)"
+            class="add-to-review-button bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          >
+            Add to Review
+          </button>
+        </div>
+      }
+    </div>
   }
+
+  <!-- Review Posts -->
   @else if (groupedPosts['REVIEW'].length > 0) {
-  <h2 class="status-title">Review</h2>
-  <div class="post-grid">
-    @for (post of groupedPosts['REVIEW']; track post.id) {
-    <a (click)="navigateToEdit(post)">
-      <app-post-item [post]="post" class="post-item"></app-post-item>
-    </a>
-    }
-  </div>
+    <h2 class="status-title text-2xl font-semibold text-gray-700">Review</h2>
+    <div class="post-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (post of groupedPosts['REVIEW']; track post.id) {
+        <a
+          (click)="navigateToEdit(post)"
+        >
+          <app-post-item [post]="post" class="post-item"></app-post-item>
+        </a>
+      }
+    </div>
   }
+
+  <!-- Published Posts -->
   @else if (groupedPosts['PUBLISHED'].length > 0) {
-  <h2 class="status-title">Published</h2>
-  <div class="post-grid">
-    @for (post of groupedPosts['PUBLISHED']; track post.id) {
-    <a (click)="navigateToEdit(post)">
-      <app-post-item [post]="post" class="post-item"></app-post-item>
-    </a>
-    }
-  </div>
+    <h2 class="status-title text-2xl font-semibold text-gray-700">Published</h2>
+    <div class="post-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (post of groupedPosts['PUBLISHED']; track post.id) {
+        <a
+          (click)="navigateToEdit(post)"
+        >
+          <app-post-item [post]="post" class="post-item"></app-post-item>
+        </a>
+      }
+    </div>
   }
+
+  <!-- No Posts Found -->
   @else if (posts.length === 0) {
-  <p class="no-posts">No posts found</p>
+    <p class="no-posts text-gray-500">No posts found</p>
   }
 </div>

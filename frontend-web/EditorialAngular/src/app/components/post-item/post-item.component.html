@@ -1,8 +1,17 @@
-<div class="post-card">
-    <h2 class="post-title">{{ post.title }}</h2>
-    <p class="post-content">{{ post.content }}</p>
-    <div class="post-meta">
-        <p class="post-author">By: {{ post.author }}</p>
-        <p>{{ formattedDate }}</p>
+<div class="post-card bg-white rounded-lg shadow-md p-6 mb-6">
+    <!-- Post Title -->
+    <h2 class="post-title text-xl font-bold text-gray-800 mb-3">
+      {{ post.title }}
+    </h2>
+  
+    <!-- Post Content -->
+    <p class="post-content text-gray-600 mb-4">
+      {{ post.content }}
+    </p>
+  
+    <!-- Post Meta -->
+    <div class="post-meta flex justify-between items-center text-sm text-gray-500">
+      <p class="post-author">By: {{ post.author }}</p>
+      <p>{{ formattedDate }}</p>
     </div>
-</div>
+  </div>

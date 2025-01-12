@@ -1,4 +1,4 @@
-.post-item-buttons {
+/* .post-item-buttons {
     margin-top: 10px;
     display: flex;
     flex-direction: row;
@@ -115,7 +115,7 @@
     background-color: #0056b3;
 }
 
-button[type="submit"]:disabled {
-    background-color: #d3d3d3; /* Light grey background */
-    color: #999; /* Lighter text */
-}
+button[type="submit"]:disabled 
+    background-color: #d3d3d3; /* Light grey background 
+    color: #999; /* Lighter text 
+} */

@@ -4,6 +4,7 @@ import { PostRequest } from '../../models/request/post-request.model';
 import { PostStatus } from '../../models/post-status.model';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-create-post',
@@ -22,25 +23,28 @@ export class CreatePostComponent {
     status: PostStatus.CONCEPT
   };
   postService: PostService = inject(PostService);
+  router: Router = inject(Router);
 
   // Save as Concept
   saveAsConcept() {
     this.postRequest.status = PostStatus.CONCEPT;
     this.submitPost();
+    this.router.navigate(['/all-posts']);
   }
 
   // Send to Review
   sendToReview() {
     this.postRequest.status = PostStatus.REVIEW;
     this.submitPost();
+    this.router.navigate(['/review']);
   }
 
   // Submit Post to Backend
   private submitPost() {
+    this.isFormSubmitted = true;
     if (this.postRequest.title && this.postRequest.content && this.postRequest.author) {
       this.postService.createPost(this.postRequest).subscribe({
         next: () => {
-          alert('Post successfully submitted!');
           this.clearForm();
         }, error: (err) => console.error('Error:', err)
       });
