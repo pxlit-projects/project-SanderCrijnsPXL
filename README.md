@@ -1,7 +1,6 @@
 # Fullstack Java Project
 
-## Firstname Lastname (Class)
-Change the name and Class in the title above
+## Sander Crijns (3AONC)
 
 ## Folder structure
 
@@ -17,4 +16,21 @@ Each folder contains its own specific `.gitignore` file.
 
 ## How to setup and run this application
 
-:heavy_check_mark:_(COMMENT) Add setup instructions and provide some direction to run the whole  application: frontend to backend._
+### Start frontend + databases
+Run the following commands in the location of the angular project
+```
+npm install
+ng build
+```
+Run the following command in the root of the project
+```
+docker compose up
+```
+
+### Start backend
+Start the microservices
+Do it in the folowing order:
+1) ConfigService
+2) DiscoveryService
+3) PostService, ReviewService, CommentService, Gateway
+![image](https://github.com/user-attachments/assets/f01a709b-f4e2-42b8-9227-4b1c1f3ebbc8)
