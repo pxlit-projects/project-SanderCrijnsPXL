@@ -33,4 +33,5 @@ Do it in the folowing order:
 1) ConfigService
 2) DiscoveryService
 3) PostService, ReviewService, CommentService, Gateway
+   
 ![image](https://github.com/user-attachments/assets/f01a709b-f4e2-42b8-9227-4b1c1f3ebbc8)
