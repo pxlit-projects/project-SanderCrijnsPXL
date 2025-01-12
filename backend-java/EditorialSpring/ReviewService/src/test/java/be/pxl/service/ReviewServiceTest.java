@@ -6,49 +6,60 @@ import be.pxl.domain.request.RabbitPostRequest;
 import be.pxl.domain.response.PostResponse;
 import be.pxl.domain.response.RabbitPostResponse;
 import be.pxl.repository.ReviewRepository;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
 import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@Testcontainers
 class ReviewServiceTest {
 
-    @Mock
-    private ReviewRepository reviewRepository;
+    @Container
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.36");
 
-    @Mock
+    @DynamicPropertySource
+    static void overrideDataSourceProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", mySqlContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySqlContainer::getUsername);
+        registry.add("spring.datasource.password", mySqlContainer::getPassword);
+    }
+
+    @Autowired
+    private ReviewRepository reviewRepository; // the real repository
+
+    @Autowired
+    private ReviewService reviewService;       // the real service
+
+    @MockBean
     private RabbitTemplate rabbitTemplate;
 
-    @Mock
+    @MockBean
     private JavaMailSender mailSender;
-
-    @InjectMocks
-    private ReviewService reviewService;
-
-    @Captor
-    private ArgumentCaptor<Post> postCaptor;
 
     private RabbitPostRequest postRequest;
     private Post post;
 
     @BeforeEach
     void setUp() {
+        reviewRepository.deleteAll();
         postRequest = new RabbitPostRequest(1L, "Test Title", "Test Content", "Author", null);
         post = Post.builder()
                 .id(1L)
@@ -63,8 +74,9 @@ class ReviewServiceTest {
     void receivePost_ShouldSavePostToReview() {
         reviewService.receivePost(postRequest);
 
-        verify(reviewRepository).save(postCaptor.capture());
-        Post savedPost = postCaptor.getValue();
+        List<Post> allPosts = reviewRepository.findAll();
+        assertEquals(1, allPosts.size());
+        Post savedPost = allPosts.get(0);
 
         assertEquals(postRequest.id(), savedPost.getId());
         assertEquals(ReviewStatus.PENDING, savedPost.getStatus());
@@ -72,34 +84,34 @@ class ReviewServiceTest {
 
     @Test
     void approvePost_ShouldThrowExceptionIfPostNotFound() {
-        when(reviewRepository.findById(1L)).thenReturn(Optional.empty());
-
+        // No post saved to DB, so it won't be found
         assertThrows(Exception.class, () -> reviewService.approvePost(1L));
-        verify(reviewRepository, never()).save(any());
+        // We can also assert that DB remains empty
+        assertTrue(reviewRepository.findAll().isEmpty());
     }
 
     @Test
     void approvePost_ShouldUpdateStatusToAcceptedAndSave() {
         MimeMessage mimeMessage = mock(MimeMessage.class);
-
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-        when(reviewRepository.findById(1L)).thenReturn(Optional.of(post));
 
-        reviewService.approvePost(1L);
+        // Save the post to DB first
+        reviewRepository.save(post);
 
-        verify(reviewRepository).save(postCaptor.capture());
-        Post savedPost = postCaptor.getValue();
-        assertEquals(ReviewStatus.ACCEPTED, savedPost.getStatus());
+        reviewService.approvePost(post.getId());
+
+        Post updatedPost = reviewRepository.findById(post.getId()).orElseThrow();
+        assertEquals(ReviewStatus.ACCEPTED, updatedPost.getStatus());
     }
 
     @Test
     void approvePost_ShouldSendPostToRabbitMQ() {
         MimeMessage mimeMessage = mock(MimeMessage.class);
-
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-        when(reviewRepository.findById(1L)).thenReturn(Optional.of(post));
 
-        reviewService.approvePost(1L);
+        reviewRepository.save(post);
+
+        reviewService.approvePost(post.getId());
 
         verify(rabbitTemplate).convertAndSend(eq("review-to-post-queue"), any(RabbitPostResponse.class));
     }
@@ -107,22 +119,21 @@ class ReviewServiceTest {
     @Test
     void approvePost_ShouldSendEmail() {
         MimeMessage mimeMessage = mock(MimeMessage.class);
-
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
-        when(reviewRepository.findById(1L)).thenReturn(Optional.of(post));
 
-        reviewService.approvePost(1L);
+        reviewRepository.save(post);
+
+        reviewService.approvePost(post.getId());
 
         verify(mailSender).send(any(MimeMessage.class));
     }
 
     @Test
     void getPostsToReview_ShouldReturnPendingAndRejectedPosts() {
-        when(reviewRepository.findAllByStatus(ReviewStatus.PENDING)).thenReturn(List.of(post));
-        when(reviewRepository.findAllByStatus(ReviewStatus.REJECTED)).thenReturn(List.of());
+        // We'll save a post with PENDING status
+        reviewRepository.save(post); // PENDING by default
 
         List<PostResponse> responses = reviewService.getPostsToReview();
-
         assertFalse(responses.isEmpty());
         assertEquals(1, responses.size());
         assertEquals(post.getTitle(), responses.get(0).title());

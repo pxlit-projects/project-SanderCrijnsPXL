@@ -5,80 +5,136 @@ import be.pxl.domain.request.EditCommentRequest;
 import be.pxl.domain.response.CommentFeignResponse;
 import be.pxl.domain.response.CommentResponse;
 import be.pxl.service.ICommentService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@ExtendWith(SpringExtension.class)
+@WebMvcTest(CommentController.class)
+@Testcontainers
 class CommentControllerTest {
 
-    @Mock
+    @Container
+    private static final MySQLContainer<?> mySqlContainer = new MySQLContainer<>("mysql:8.0.36");
+
+    @DynamicPropertySource
+    static void overrideDataSourceProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", mySqlContainer::getJdbcUrl);
+        registry.add("spring.datasource.username", mySqlContainer::getUsername);
+        registry.add("spring.datasource.password", mySqlContainer::getPassword);
+    }
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean
     private ICommentService commentService;
 
-    @InjectMocks
-    private CommentController commentController;
+    @Autowired
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.openMocks(this);
+        Mockito.reset(commentService);
     }
 
     @Test
-    void getCommentsForPost_ShouldReturnComments() {
+    void getCommentsForPost_ShouldReturnComments() throws Exception {
         List<CommentFeignResponse> comments = List.of(new CommentFeignResponse(1L, "Test Content", "Author"));
         when(commentService.getCommentsForPost(1L)).thenReturn(comments);
 
-        ResponseEntity<List<CommentFeignResponse>> response = commentController.getCommentsForPost(1L);
-
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(comments, response.getBody());
-        verify(commentService, times(1)).getCommentsForPost(1L);
+        mockMvc.perform(get("/api/comments/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(1))
+                .andExpect(jsonPath("$[0].content").value("Test Content"))
+                .andExpect(jsonPath("$[0].author").value("Author"));
     }
 
     @Test
-    void addPost_ShouldAddComment() {
-        CommentRequest commentRequest = new CommentRequest("Test Content", "Author");
+    void getCommentsForPost_ShouldReturnEmptyList_WhenNoCommentsExist() throws Exception {
+        when(commentService.getCommentsForPost(1L)).thenReturn(Collections.emptyList());
 
-        commentController.addPost(1L, commentRequest);
-
-        verify(commentService, times(1)).addCommentToPost(1L, commentRequest);
+        mockMvc.perform(get("/api/comments/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.size()").value(0));
     }
 
     @Test
-    void deleteComment_ShouldDeleteComment() {
-        commentController.deleteComment(1L);
+    void addPost_ShouldAddComment() throws Exception {
+        CommentRequest commentRequest = new CommentRequest("New Comment", "New Author");
+
+        mockMvc.perform(post("/api/comments/add/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(commentRequest)))
+                .andExpect(status().isCreated());
+
+        verify(commentService, times(1)).addCommentToPost(eq(1L), any(CommentRequest.class));
+    }
+
+    @Test
+    void deleteComment_ShouldDeleteComment() throws Exception {
+        mockMvc.perform(delete("/api/comments/1"))
+                .andExpect(status().isOk());
 
         verify(commentService, times(1)).deleteComment(1L);
     }
 
     @Test
-    void editComment_ShouldReturnEditedComment() {
-        EditCommentRequest editCommentRequest = new EditCommentRequest("New Content");
-        CommentResponse commentResponse = new CommentResponse(1L, 1L, "New Content", "Author");
-        when(commentService.editComment(1L, editCommentRequest)).thenReturn(commentResponse);
+    void deleteComment_ShouldNotThrowException_WhenCommentDoesNotExist() throws Exception {
+        doNothing().when(commentService).deleteComment(anyLong());
 
-        ResponseEntity<CommentResponse> response = commentController.editComment(1L, editCommentRequest);
+        mockMvc.perform(delete("/api/comments/999"))
+                .andExpect(status().isOk());
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(commentResponse, response.getBody());
-        verify(commentService, times(1)).editComment(1L, editCommentRequest);
+        verify(commentService, times(1)).deleteComment(999L);
     }
 
     @Test
-    void editComment_ShouldReturnNotFound_WhenCommentNotFound() {
-        EditCommentRequest editCommentRequest = new EditCommentRequest("New Content");
+    void editComment_ShouldReturnEditedComment() throws Exception {
+        EditCommentRequest editCommentRequest = new EditCommentRequest("Updated Content");
+        CommentResponse commentResponse = new CommentResponse(1L, 1L, "Updated Content", "Author");
+
+        when(commentService.editComment(1L, editCommentRequest)).thenReturn(commentResponse);
+
+        mockMvc.perform(patch("/api/comments/1/edit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(editCommentRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content").value("Updated Content"))
+                .andExpect(jsonPath("$.author").value("Author"));
+    }
+
+    @Test
+    void editComment_ShouldReturnNotFound_WhenCommentNotFound() throws Exception {
+        EditCommentRequest editCommentRequest = new EditCommentRequest("Updated Content");
+
         when(commentService.editComment(1L, editCommentRequest)).thenThrow(new RuntimeException());
 
-        ResponseEntity<CommentResponse> response = commentController.editComment(1L, editCommentRequest);
-
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        mockMvc.perform(patch("/api/comments/1/edit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(editCommentRequest)))
+                .andExpect(status().isNotFound());
     }
 }
