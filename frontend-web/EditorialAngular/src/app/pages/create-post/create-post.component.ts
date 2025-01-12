@@ -3,6 +3,7 @@ import { PostService } from '../../services/post.service';
 import { PostRequest } from '../../models/request/post-request.model';
 import { PostStatus } from '../../models/post-status.model';
 import { FormsModule } from '@angular/forms';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-create-post',
@@ -12,6 +13,8 @@ import { FormsModule } from '@angular/forms';
   imports: [FormsModule]
 })
 export class CreatePostComponent {
+  private isFormSubmitted: boolean = false;
+
   postRequest: PostRequest = {
     title: '',
     content: '',
@@ -62,4 +65,12 @@ export class CreatePostComponent {
     console.log('Is editor:', localStorage.getItem('role') === 'editor');
     return localStorage.getItem('role') === 'editor';
   }
+
+  canDeactivate(): boolean | Observable<boolean> {
+    if (this.isFormSubmitted) {
+      return true;
+    }
+    return confirm('You have an unsaved post. Are you sure you want to leave?');
+  }
+  
 }

@@ -116,18 +116,6 @@ class ReviewServiceTest {
         verify(mailSender).send(any(MimeMessage.class));
     }
 
-//    @Test
-//    void approvePost_ShouldLogMessages() {
-//        when(reviewRepository.findById(1L)).thenReturn(Optional.of(post));
-//
-//        reviewService.approvePost(1L);
-//
-//        // Assuming you have a way to capture log messages, verify the log messages
-//        // This part is pseudo-code and depends on your logging framework and setup
-//        verify(log).info("Approving post with ID {}", 1L);
-//        verify(log).info("Post with ID {} successfully approved", 1L);
-//    }
-
     @Test
     void getPostsToReview_ShouldReturnPendingAndRejectedPosts() {
         when(reviewRepository.findAllByStatus(ReviewStatus.PENDING)).thenReturn(List.of(post));

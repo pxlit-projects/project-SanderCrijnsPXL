@@ -10,7 +10,7 @@ describe('NavbarComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         NavbarComponent,
-        RouterTestingModule  // Zorgt voor een mock router omgeving
+        RouterTestingModule
       ],
     }).compileComponents();
 
@@ -32,5 +32,5 @@ describe('NavbarComponent', () => {
     expect(links[2].getAttribute('routerLink')).toBe('/create');
     expect(links[3].getAttribute('routerLink')).toBe('/all-posts');
     expect(links[4].getAttribute('routerLink')).toBe('/review');
-  });
+  }); 
 });

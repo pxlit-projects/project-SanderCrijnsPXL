@@ -5,11 +5,12 @@ import { PostsReviewOverviewComponent } from './pages/posts-review-overview/post
 import { AllPostsOverviewComponent } from './pages/all-posts-overview/all-posts-overview.component';
 import { EditPostComponent } from './pages/edit-post/edit-post.component';
 import { LoginComponent } from './pages/login/login.component';
+import { CanDeactivateGuard } from './guards/can_deactivate.guard';
 
 export const routes: Routes = [
     { path: '', component:LoginComponent},
     { path: 'published-posts', component: PostOverviewComponent },
-    { path: 'create', component: CreatePostComponent },
+    { path: 'create', component: CreatePostComponent, canDeactivate: [CanDeactivateGuard] },
     { path: 'all-posts', component: AllPostsOverviewComponent },
     { path: 'review', component: PostsReviewOverviewComponent },
     { path: 'edit/:id', component: EditPostComponent },
